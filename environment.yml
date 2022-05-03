@@ -1,0 +1,16 @@
+name: mdachecker
+channels:
+  - conda-forge
+dependencies:
+    # Base depends
+  - python
+  - pip
+
+    # Testing
+  - pytest
+  - pytest-cov
+  - codecov
+  - coverage
+
+  - numpy
+  - mdanalysis
