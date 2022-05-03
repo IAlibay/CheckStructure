@@ -56,7 +56,7 @@ jobs:
 
       - name: "run tests"
         run: |
-          pytest -v mdachecker/tests/
+          pytest -v mdachecker/tests/ --cov=mdachecker --cov-report=xml
 
       - name: "codecov"
         if: "github.event != 'schedule'"
