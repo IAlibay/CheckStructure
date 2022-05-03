@@ -77,7 +77,7 @@ class CheckStructure(AnalysisBase):
     def _single_frame(self):
 
         overlaps = None
-        longbonds = None
+        lbonds = None
 
         if self.atomcut is not None:
             pairs, distances = self_capped_distance(
@@ -98,19 +98,19 @@ class CheckStructure(AnalysisBase):
         if self.bondcut is not None:
             try:
                 bond_ids = np.where(self.ag.intra_bonds.values() > self.bondcut)[0]
-            except AttributeError:
+            except (AttributeError, TypeError) as err:
                 wmsg = f"atomgroup has no bonds for frame {self._frame_index}"
                 warnings.warn(wmsg)
+            else:
+                if bond_ids.size > 0:
+                    # get the bonds
+                    bonds = self.ag.intra_bonds[bond_ids]
+                    ixs = bonds.indices
+                    vals = bonds.values()
 
-            if bond_ids.size > 0:
-                # get the bonds
-                bonds = self.ag.intra_bonds[bond_ids]
-                ixs = bonds.indices
-                vals = bonds.values()
-
-                longbonds = np.concatenate(
+                    lbonds = np.concatenate(
                         (bonds.indices, np.reshape(bonds.values(), (-1, 1))),
                         axis=1, dtype=object)
 
-        if (overlaps is not None) or (longbonds is not None):
-            self.results.badframes.append((self._frame_index, overlaps, longbonds))
+        if (overlaps is not None) or (lbonds is not None):
+            self.results.badframes.append((self._frame_index, overlaps, lbonds))
