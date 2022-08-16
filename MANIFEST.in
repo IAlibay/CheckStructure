@@ -1,2 +1,3 @@
 include versioneer.py
 include mdachecker/_version.py
+include mdachecker/tests/datafiles/*
